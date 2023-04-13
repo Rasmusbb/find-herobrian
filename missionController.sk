@@ -1,0 +1,53 @@
+
+command /TaskController [<Text>]:
+    trigger: 
+        if arg-1 = "taskbord":
+            taskbord(player)
+
+        if arg-1 = "settings":
+            open chest with 3 row named "&6TaskController" to player
+            set slot 10 of player's current inventory to a nametag named "&6TaskBord" with lore "Force update taskbord" 
+            set slot 12 of player's current inventory to red wool named "&6Task" with lore "See all tasks avilable"
+            set slot 14 of player's current inventory to player's skull named "&aYour tasks" with lore "See the tasks you got"
+  
+
+
+
+#Logic for settins
+on inventory click:
+    if inventory name of player's current inventory is "&6Tasks list":
+        cancel event
+
+    if inventory name of player's current inventory is "&6TaskController":
+        cancel event
+        if clicked slot is 10:
+            taskbord(player)   
+        if clicked slot is 12:
+            open chest with 3 row named "&6Tasks list" to player
+            formatslots(player,"Tasks")
+        if clicked slot is 14:
+            open chest with 3 row named "&6Tasks list" to player
+
+
+#sets and updates the scorebord of the player
+function taskbord(caller: Player):
+    set name of sidebar of {_caller} to "&6Tasks"
+    set score "I'm second!" in sidebar of {_caller}  to 1
+    wait 10 seconds
+    wipe {_caller}'s sidebar
+
+
+
+function formatslots(caller: player,list: Text):
+    set {_slot.%{_caller}%}  to 0
+    if {_list} is "Tasks":
+        set {Tasks::*} to {Tasks::*}
+
+    if {_list} is "PlayersTasks":
+        set {Tasks::*} to {Tasks::*}
+
+    loop {Tasks::*}:
+        set slot {_slot.%{_caller}%} of {_caller}'s current inventory to red wool named "&aYour tasks" with lore "See the tasks you got"
+        add 1 to {_slot.%{_caller}%} 
+
+    
